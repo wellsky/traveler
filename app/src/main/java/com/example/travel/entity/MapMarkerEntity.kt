@@ -8,28 +8,31 @@ import com.example.travel.dto.MapMarker
 data class MapMarkerEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long,
-    val type: Byte,
     val lat: Double,
-    val lng: Double
+    val lng: Double,
+    val name: String = "",
+    val text: String = ""
 ) {
     fun toDto() = MapMarker(
         id = id,
-        type = type,
         lat = lat,
-        lng = lng
+        lng = lng,
+        name = name,
+        text = text
     )
 
     companion object {
         fun fromDto(dto: MapMarker) =
             MapMarkerEntity(
                 id = dto.id,
-                type = dto.type,
                 lat = dto.lat,
                 lng = dto.lng,
-
+                name = dto.name,
+                text = dto.text
             )
     }
 }
 
 fun List<MapMarkerEntity>.toDto(): List<MapMarker> = map(MapMarkerEntity::toDto)
 fun List<MapMarker>.toEntity(): List<MapMarkerEntity> = map(MapMarkerEntity::fromDto)
+fun MapMarker.toEntity(): MapMarkerEntity = MapMarkerEntity.fromDto(this)

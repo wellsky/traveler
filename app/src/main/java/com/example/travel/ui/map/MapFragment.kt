@@ -12,6 +12,11 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import androidx.navigation.fragment.findNavController
+import com.example.travel.dto.MapMarker
+import com.example.travel.ui.editor.EditMarkerFragment.Companion.markerId
+import com.example.travel.ui.editor.EditMarkerFragment.Companion.newMarkerLat
+import com.example.travel.ui.editor.EditMarkerFragment.Companion.newMarkerLng
 
 class MapFragment : Fragment() {
     private val viewModel: MapViewModel by viewModels (
@@ -19,15 +24,37 @@ class MapFragment : Fragment() {
     )
 
     private val callback = OnMapReadyCallback { googleMap ->
-        val sydney = LatLng(-34.0, 151.0)
-        googleMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+//        val sydney = LatLng(-34.0, 151.0)
+//        googleMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
+//        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
 
-        viewModel.data.observe(viewLifecycleOwner) {
-            it.forEach {
-                val marker = LatLng(it.lat, it.lng)
-                googleMap.addMarker(MarkerOptions().position(marker).title("Marker"))
+        viewModel.data.observe(viewLifecycleOwner) { markersList ->
+            markersList.forEach {
+                val coords = LatLng(it.lat, it.lng)
+                val marker = googleMap.addMarker(MarkerOptions().position(coords).title(it.name))
+                marker?.tag = it
             }
+        }
+
+        googleMap.setOnMapClickListener {
+            findNavController().navigate(
+                R.id.action_nav_map_to_editMarketFragment,
+                Bundle().apply {
+                    newMarkerLat = it.latitude
+                    newMarkerLng = it.longitude
+                }
+            )
+        }
+
+        googleMap.setOnMarkerClickListener {
+            val marker = it.tag as MapMarker
+            findNavController().navigate(
+                R.id.action_nav_map_to_editMarketFragment,
+                Bundle().apply {
+                    markerId = marker.id
+                }
+            )
+            true
         }
     }
 
@@ -36,6 +63,8 @@ class MapFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        getActivity()?.setTitle("Map");
+
         return inflater.inflate(R.layout.fragment_map, container, false)
     }
 

@@ -10,7 +10,7 @@ import com.example.travel.entity.MapMarkerEntity
 
 @Database(entities = [
     MapMarkerEntity::class,
- ], version = 1, exportSchema = false)
+ ], version = 2, exportSchema = false)
 abstract class AppDb : RoomDatabase() {
     abstract fun mapMarkerDao(): MapMarkerDao
 
