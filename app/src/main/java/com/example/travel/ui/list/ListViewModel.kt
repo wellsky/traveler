@@ -1,13 +1,12 @@
 package com.example.travel.ui.list
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.*
+import com.example.travel.repository.MapRepository
+import com.example.travel.repository.MapRepositorySQLImpl
+import kotlinx.coroutines.Dispatchers
 
-class ListViewModel : ViewModel() {
-
-    private val _text = MutableLiveData<String>().apply {
-        value = "List"
-    }
-    val text: LiveData<String> = _text
+class ListViewModel(application: Application) : AndroidViewModel(application) {
+    private val repository: MapRepository = MapRepositorySQLImpl(application)
+    val data = repository.data.asLiveData(Dispatchers.Default)
 }
