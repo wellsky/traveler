@@ -10,11 +10,15 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.example.travel.R
 import com.example.travel.adapter.MarkersListAdapter
 import com.example.travel.adapter.OnInteractionListener
 import com.example.travel.databinding.FragmentEditMarkerBinding
 import com.example.travel.databinding.FragmentListBinding
 import com.example.travel.dto.MapMarker
+import com.example.travel.ui.editor.EditMarkerFragment.Companion.newMarkerLat
+import com.example.travel.ui.editor.EditMarkerFragment.Companion.newMarkerLng
+import com.example.travel.ui.map.MapFragment.Companion.selectedMarkerId
 import com.example.travel.ui.map.MapViewModel
 
 class ListFragment : Fragment() {
@@ -31,7 +35,12 @@ class ListFragment : Fragment() {
 
         val adapter = MarkersListAdapter(object : OnInteractionListener {
             override fun onClick(marker: MapMarker) {
-
+                findNavController().navigate(
+                    R.id.action_nav_list_to_nav_map,
+                    Bundle().apply {
+                        selectedMarkerId = marker.id
+                    }
+                )
             }
         })
 

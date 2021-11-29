@@ -17,8 +17,14 @@ import com.example.travel.dto.MapMarker
 import com.example.travel.ui.editor.EditMarkerFragment.Companion.markerId
 import com.example.travel.ui.editor.EditMarkerFragment.Companion.newMarkerLat
 import com.example.travel.ui.editor.EditMarkerFragment.Companion.newMarkerLng
+import com.example.travel.utils.DoubleArg
+import com.example.travel.utils.LongArg
 
 class MapFragment : Fragment() {
+    companion object {
+        var Bundle.selectedMarkerId: Long by LongArg
+    }
+
     private val viewModel: MapViewModel by viewModels (
         ownerProducer = ::requireParentFragment
     )
@@ -33,6 +39,14 @@ class MapFragment : Fragment() {
                 val coords = LatLng(it.lat, it.lng)
                 val marker = googleMap.addMarker(MarkerOptions().position(coords).title(it.name))
                 marker?.tag = it
+
+                arguments?.selectedMarkerId?.let { selected ->
+                    if (selected == it.id) {
+                        googleMap.moveCamera(CameraUpdateFactory.newLatLng(coords))
+                    } else {
+                        marker?.setVisible(false)
+                    }
+                }
             }
         }
 
