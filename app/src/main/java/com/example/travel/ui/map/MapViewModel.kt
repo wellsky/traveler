@@ -1,13 +1,13 @@
 package com.example.travel.ui.map
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.*
+import com.example.travel.repository.MapRepository
+import com.example.travel.repository.MapRepositorySQLImpl
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class MapViewModel : ViewModel() {
-
-    private val _text = MutableLiveData<String>().apply {
-        value = "Map"
-    }
-    val text: LiveData<String> = _text
+class MapViewModel(application: Application) : AndroidViewModel(application) {
+    private val repository: MapRepository = MapRepositorySQLImpl(application)
+    val data = repository.data.asLiveData(Dispatchers.Default)
 }
