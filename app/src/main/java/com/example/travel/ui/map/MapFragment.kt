@@ -17,7 +17,6 @@ import com.example.travel.dto.MapMarker
 import com.example.travel.ui.editor.EditMarkerFragment.Companion.markerId
 import com.example.travel.ui.editor.EditMarkerFragment.Companion.newMarkerLat
 import com.example.travel.ui.editor.EditMarkerFragment.Companion.newMarkerLng
-import com.example.travel.utils.DoubleArg
 import com.example.travel.utils.LongArg
 
 class MapFragment : Fragment() {
@@ -33,8 +32,9 @@ class MapFragment : Fragment() {
 //        val sydney = LatLng(-34.0, 151.0)
 //        googleMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
 //        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
-
         viewModel.data.observe(viewLifecycleOwner) { markersList ->
+            googleMap.clear()
+
             markersList.forEach {
                 val coords = LatLng(it.lat, it.lng)
                 val marker = googleMap.addMarker(MarkerOptions().position(coords).title(it.name))

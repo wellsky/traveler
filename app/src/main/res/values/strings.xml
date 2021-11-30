@@ -17,4 +17,6 @@
     <string name="button_save_marker">Save</string>
     <string name="coords">Coords: %1$s, %2$s</string>
     <string name="marker_saved">Marker saved</string>
+    <string name="button_remove_marker">Remove</string>
+    <string name="marker_removed">Marker removed</string>
 </resources>

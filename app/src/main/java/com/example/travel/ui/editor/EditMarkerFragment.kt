@@ -5,12 +5,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import club.electro.util.AndroidUtils
 import com.example.travel.R
 import com.example.travel.databinding.FragmentEditMarkerBinding
 import com.example.travel.dto.MapMarker
-import com.example.travel.ui.map.MapViewModel
+import androidx.navigation.fragment.findNavController
 import com.example.travel.utils.DoubleArg
 import com.example.travel.utils.LongArg
 import com.google.android.material.snackbar.Snackbar
@@ -36,6 +37,7 @@ class EditMarkerFragment : Fragment() {
         arguments?.markerId?.let { id ->
             if (id != 0L) {
                 viewModel.loadCurrentMarker(id)
+                binding.removeMarker.isVisible = true
             }
         }
 
@@ -75,7 +77,15 @@ class EditMarkerFragment : Fragment() {
 
                 AndroidUtils.hideKeyboard(requireView())
                 Snackbar.make(binding.root, R.string.marker_saved, Snackbar.LENGTH_LONG).show()
+                findNavController().navigateUp()
             }
+        }
+
+        binding.removeMarker.setOnClickListener {
+            viewModel.removeCurrentMarker()
+            AndroidUtils.hideKeyboard(requireView())
+            Snackbar.make(binding.root, R.string.marker_removed, Snackbar.LENGTH_LONG).show()
+            findNavController().navigateUp()
         }
 
         return binding.root

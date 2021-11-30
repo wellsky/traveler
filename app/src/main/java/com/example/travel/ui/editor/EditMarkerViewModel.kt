@@ -31,6 +31,12 @@ class EditMarkerViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
+    fun removeCurrentMarker() = viewModelScope.launch {
+        currentMarker.value?.let {
+            repository.removeMarkerById(it.id)
+        }
+    }
+
 }
 
 val emptyMapMarker: MapMarker = MapMarker(
